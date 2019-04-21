@@ -65,6 +65,11 @@ function App() {
     newTodos[index].isComplete = true;
     setTodos(newTodos);
   };
+  const removeTodo = index => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  }
 
   return (
     <div className="app">
@@ -75,6 +80,7 @@ function App() {
             index={index}
             todo={todo}
             completeTodo={completeTodo}
+            removeTodo={removeTodo}
           />
         ))}
 
