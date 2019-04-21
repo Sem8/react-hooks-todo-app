@@ -1,8 +1,19 @@
 import React, { useState } from "react";
 import "./App.css";
 
-function Todo({ todo, index }) {
-  return <div className="todo">{todo.text}</div>;
+function Todo({ todo, index, completeTodo, removeTodo }) {
+  return (
+    <div
+      style={{ textDecoration: todo.isComplete ? "line-through" : "" }}
+      className="todo"
+    >
+      {todo.text}
+      <div>
+        <button onClick={() => completeTodo(index)}>Complete</button>
+        <button onClick={() => removeTodo(index)}>X</button>
+      </div>
+    </div>
+  );
 }
 
 function TodoForm({ addTodo }) {
@@ -10,10 +21,10 @@ function TodoForm({ addTodo }) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    if(!value) return;
+    if (!value) return;
     addTodo(value);
-    setValue('');    
-  }
+    setValue("");
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -21,6 +32,7 @@ function TodoForm({ addTodo }) {
         type="text"
         className="input"
         value={value}
+        placeholder="Add Todo..."
         onChange={e => setValue(e.target.value)}
       />
     </form>
@@ -43,14 +55,30 @@ function App() {
     }
   ]);
 
+  const addTodo = text => {
+    const newTodos = [...todos, { text }];
+    setTodos(newTodos);
+  };
+
+  const completeTodo = index => {
+    const newTodos = [...todos];
+    newTodos[index].isComplete = true;
+    setTodos(newTodos);
+  };
+
   return (
     <div className="app">
       <div className="todo-list">
         {todos.map((todo, index) => (
-          <Todo key={index} index={index} todo={todo} />
+          <Todo
+            key={index}
+            index={index}
+            todo={todo}
+            completeTodo={completeTodo}
+          />
         ))}
 
-        <TodoForm addTodo={addTodo}/>
+        <TodoForm addTodo={addTodo} />
       </div>
     </div>
   );
